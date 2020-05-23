@@ -1,4 +1,4 @@
-# awesome_log
+# xlog
 
 ## target
 
@@ -21,3 +21,4 @@
 * protoc
 * redis
 * swig
+* HP-socket
