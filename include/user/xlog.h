@@ -3,34 +3,46 @@
 
 #include "user/xerror.h"
 #include "user/xlevel.h"
-#include "user/xlog_sys.h"
+#include "xsys/xlog_sys.h"
 
-#ifdef use_xLog
+
+#ifdef USE_XLOG
 
     #include <stdlib.h>
     #include <sys/types.h>
     #include <unistd.h>
 
+    #include "xsys/xcmp.h"
+
     pid_t g_pid = -1;
     pid_t g_ppid = -1;
 
+    xLevelInfo g_levelInfo = {
+        .level2File = Debug,
+        .level2Screen = Debug
+    };
+
     #define xCheckEQ(left, right, fmt, ...) do { \
         if ((left) != (right)) {
-            xErrorSys("check failed, file(%s)-line(%d): %s != %s", __FILE__, __LINE__, #left, #right);
-            abort();
+            xExit(#left, SYMBOL_NE, #right, fmt, ...);
+        }
+    } while(0)
+
+    #define xCheckNE(left, right, fmt, ...) do { \
+        if ((left) == (right)) {
+            xExit(#left, SYMBOL_EQ, #right);
         }
     } while(0)
 
     #define xCheckGT(left, right, fmt, ...) do { \
         if ((left) <= (right)) {
-            xErrorSys("check failed, file(%s)-line(%d): %s <= %s", __FILE__, __LINE__, #left, #right);
-            abort();
+            xExit(#left, #right);
         }
     } while(0)
 
     #define xCheckGE(left, right, fmt, ...) do { \
         if ((left) < (right)) {
-            xErrorSys("check failed, file(%s)-line(%d): %s < %s", __FILE__, __LINE__, #left, #right);
+            xErrorSys("check failed, file(%s),line(%d): %s < %s", __FILE__, __LINE__, #left, #right);
             abort();
         }
     } while(0)
@@ -49,8 +61,10 @@
         }
     } while(0)
 
-    #define xError(const char* fmt, ...) do { \
-    } while(0)
+    inline void xError(const char* fmt, ...)
+    {
+
+    }
 
     #define xWarn(const char* fmt, ...) do { \
     } while(0)
@@ -61,11 +75,11 @@
     #define xDebug(const char* fmt, ...) do { \
     } while(0)
 
-    inline xStatus xRegister(moudle, try_times, timeout)
+    inline xStatus xRegister(const char* moudle, uint try_times, uint timeout)
     {
         g_pid = getpid();
         g_ppid = getppid();
-        xStatus status = xRegisterSys(g_ppid, g_pid, #moudle, try_times, timeout);
+        xStatus status = xRegisterSys(g_ppid, g_pid, moudle, try_times, timeout);
         if (status != xSuccess) {
             dfxError("register error, process name(%s), pid(%d), ppid(%d), status(%d)",\
                 __progname, g_pid, g_ppid, status);  //start log print
@@ -91,8 +105,20 @@
         return xSuccess;
     } while(0)
 
-    inline xStatus xSetLevel(const xLevelInfo* info) do { \
-    } while(0)
+    /**
+     * @brief set module or runnable level
+     * 
+     * @param module NULL, set global loglevel
+     * @param info 
+     * @return xStatus 
+     */
+    inline xStatus xSetLevel(const char* module, const xLevelInfo* info)
+    {
+        g_levelInfo.level2File = xLevelInfo -> level2File;
+        g_levelInfo.level2Screen = xLevelInfo -> level2Screen;
+
+        xStatus status = xSetLevelSys(&g_levelInfo);
+    }
 
     
 
@@ -115,4 +141,4 @@
 
 
 
-#endif //__MACRO_XLOG_USER_H__
+#endif //__MACRO_XLOG_H__
