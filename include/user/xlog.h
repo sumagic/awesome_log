@@ -18,11 +18,11 @@
     pid_t g_ppid = -1;
 
     xLevelInfo g_levelInfo = {
-        .level2File = Debug,
-        .level2Screen = Debug
+        .level2File = xLevelDebug,
+        .level2Screen = xLevelDebug
     };
 
-    #define xCheckEQ(left, right, fmt, ...) do { \
+    #define xCheckEQ(left, right, fmt, ...) do {
         if ((left) != (right)) {
             xExit(#left, SYMBOL_NE, #right, fmt, ...);
         }
@@ -92,7 +92,7 @@
     }
 
     inline xStatus xUnRegister(void)
-    {                                                    \
+    {
         xStatus status = xUnRegisterSys(g_ppid, g_pid);
         if (status != xSuccess) {
             dfxError("unregister error, process name(%s), pid(%d), ppid(%d), status(%d)",\

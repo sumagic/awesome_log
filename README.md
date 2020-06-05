@@ -1,5 +1,8 @@
 # xlog
 
+* xlogd
+* xlogtool
+
 ## target
 
 * higher speed
