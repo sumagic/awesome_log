@@ -17,23 +17,24 @@ include(protobuf)
 # include(boost)
 
 # compile boost
-set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/thirdparty/Boost)
-set(BOOST_BIN_ROOT ${CMAKE_BINARY_DIR}/compile/Boost)
+set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/thirdparty/boost)
+set(BOOST_BIN_ROOT ${CMAKE_BINARY_DIR}/compile/boost)
 set(BOOST_CONFIGURE ./bootstrap.sh --with-libraries=all --with-toolset=gcc)
 set(BOOST_MAKE ./b2)
 set(BOOST_INSTALL ./b2 install --prefix=${BOOST_BIN_ROOT})
-# add_custom_target(BOOST ALL
-#         COMMAND ${BOOST_CONFIGURE}
-#         COMMAND ${BOOST_MAKE}
-#         COMMAND ${BOOST_INSTALL}
-#         WORKING_DIRECTORY ${BOOST_ROOT}
-#         COMMENT "Original boost compile target")
+add_custom_target(BOOST ALL
+        COMMAND ${BOOST_CONFIGURE}
+        COMMAND ${BOOST_MAKE}
+        COMMAND ${BOOST_INSTALL}
+        WORKING_DIRECTORY ${BOOST_ROOT}
+        COMMENT "Original boost compile target")
 
 # compile redis
 set(REDIS_ROOT ${CMAKE_SOURCE_DIR}/thirdparty/redis)
 set(REDIS_BIN_ROOT ${CMAKE_BINARY_DIR}/compile/redis)
 add_custom_target(REDIS ALL
         COMMAND make
+        # COMMAND make test
         COMMAND make PREFIX=${REDIS_BIN_ROOT} install
         WORKING_DIRECTORY ${REDIS_ROOT}
         COMMENT "Original redis makefile target")

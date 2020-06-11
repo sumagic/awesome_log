@@ -1,0 +1,19 @@
+include(ExternalProject)
+
+set(PROTOBUF_ROOT ${CMAKE_SOURCE_DIR}/thirdparty/protobuf)
+set(PROTOBUF_BIN_ROOT ${CMAKE_BINARY_DIR}/compile/protobuf)
+set(PROTOBUF_CONFIGURE cd ${PROTOBUF_ROOT} && ./autogen.sh && ./configure --prefix=${PROTOBUF_BIN_ROOT})
+set(PROTOBUF_MAKE cd ${PROTOBUF_ROOT} && make)
+set(PROTOBUF_INSTALL_CMD cd ${PROTOBUF_ROOT} && make install)
+
+ExternalProject_Add(
+    PROTOBUF
+    PREFIX ${PROTOBUF_ROOT}
+    SOURCE_DIR ${PROTOBUF_ROOT}
+    CONFIGURE_COMMAND ${PROTOBUF_CONFIGURE}
+    BUILD_COMMAND ${PROTOBUF_MAKE}
+    INSTALL_COMMAND ${PROTOBUF_INSTALL_CMD}
+)
+
+# set(PROTOBUF_LIB ${PROTOBUF_BIN_ROOT}/libgflags_nothreads.a)
+set(PROTOBUF_INCLUDE_LIB ${PROTOBUF_BIN_ROOT}/include)

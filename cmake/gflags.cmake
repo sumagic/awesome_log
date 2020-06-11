@@ -1,0 +1,21 @@
+include(ExternalProject)
+
+set(GFLAGS_ROOT ${CMAKE_SOURCE_DIR}/thirdparty/gflags)
+set(GFLAGS_BIN_ROOT ${CMAKE_BINARY_DIR}/compile/gflags)
+set(GFLAGS_CONFIGURE cd ${GFLAGS_ROOT} && cmake -D CMAKE_INSTALL_PREFIX=${GFLAGS_BIN_ROOT} .)
+set(GFLAGS_MAKE cd ${GFLAGS_ROOT} && make)
+set(GFLAGS_INSTALL_CMD cd ${GFLAGS_ROOT} && make install)
+
+ExternalProject_Add(
+    GFLAGS
+    PREFIX ${GFLAGS_ROOT}
+    SOURCE_DIR ${GFLAGS_ROOT}
+    CONFIGURE_COMMAND ${GFLAGS_CONFIGURE}
+    BUILD_COMMAND ${GFLAGS_MAKE}
+    INSTALL_COMMAND ${GFLAGS_INSTALL_CMD}
+)
+
+set(GFLAGS_LIB ${GFLAGS_BIN_ROOT}/libgflags_nothreads.a)
+set(GFLAGS_INCLUDE_LIB ${GFLAGS_BIN_ROOT}/include)
+
+
